@@ -23,7 +23,6 @@ THE SOFTWARE.
 //! Corrections for precession
 
 use angle;
-use std;
 use time;
 
 /**

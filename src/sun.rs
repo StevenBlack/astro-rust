@@ -24,7 +24,6 @@ THE SOFTWARE.
 
 use angle;
 use time;
-use std;
 use planet;
 use coords;
 

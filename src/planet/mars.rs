@@ -85,7 +85,7 @@ pub fn north_pol_ecl_coords(JC: f64) -> coords::EclPoint {
         long: (352.9065 + 1.17330*JC).to_radians(),
         lat:  (63.28180 - 0.00394*JC).to_radians()
     }
-    
+
 }
 
 /// Holds Mar's ephemeris values for physical observations

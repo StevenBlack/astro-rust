@@ -22,7 +22,6 @@ THE SOFTWARE.
 
 //! Parabolic orbits
 
-use std;
 use orbit;
 
 /**
