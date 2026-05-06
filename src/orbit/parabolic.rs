@@ -42,16 +42,14 @@ orbit at a given time
 * `q`: Perihelion distance *| in AU*
 **/
 pub fn true_anom_and_rad_vec(t: f64, T: f64, q: f64) -> (f64, f64) {
+  let W = 0.03649116245 * (t - T) / q.powf(1.5);
+  let G = W / 2.0;
+  let Y = (G + (G * G + 1.0).sqrt()).cbrt();
+  let s = Y - 1.0 / Y;
+  let v = 2.0 * s.atan();
+  let r = q * (1.0 + s * s);
 
-    let W = 0.03649116245 * (t - T) / q.powf(1.5);
-    let G = W / 2.0;
-    let Y = (G + (G*G + 1.0).sqrt()).cbrt();
-    let s = Y - 1.0/Y;
-    let v = 2.0 * s.atan();
-    let r = q * (1.0 + s*s);
-
-    (v, r)
-
+  (v, r)
 }
 
 /**
@@ -76,28 +74,22 @@ orbit and it's radius vector at that time
 **/
 
 #[inline]
-pub fn passage_through_node (
-
-    w    : f64,
-    q    : f64,
-    T    : f64,
-    node : &orbit::Node
-
+pub fn passage_through_node(
+  w: f64,
+  q: f64,
+  T: f64,
+  node: &orbit::Node,
 ) -> (f64, f64) {
-
-    match *node {
-        orbit::Node::Ascend  => pass_through_node(-w, q, T),
-        orbit::Node::Descend => pass_through_node(std::f64::consts::PI - w, q, T)
-    }
-
+  match *node {
+    orbit::Node::Ascend => pass_through_node(-w, q, T),
+    orbit::Node::Descend => pass_through_node(std::f64::consts::PI - w, q, T),
+  }
 }
 
 fn pass_through_node(v: f64, q: f64, T: f64) -> (f64, f64) {
+  let s = (v / 2.0).tan();
+  let T_node = T + q.powf(1.5) * (s * (s * s + 3.0)) * 27.403895;
+  let rad_vec = q * (1.0 + s * s);
 
-    let s = (v / 2.0).tan();
-    let T_node = T + q.powf(1.5) * (s * (s*s + 3.0)) *  27.403895;
-    let rad_vec = q * (1.0 + s*s);
-
-    (T_node, rad_vec)
-
+  (T_node, rad_vec)
 }

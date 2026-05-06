@@ -45,72 +45,80 @@ orbit at a given time
 * `accuracy`: Desired accuracy for the results. For example, passing `0.000001`
               gives that much accuracy in radians and AU.
 **/
-pub fn true_anom_and_rad_vec<'a> (
+pub fn true_anom_and_rad_vec<'a>(
+  t: f64,
+  T: f64,
+  ecc: f64,
+  q: f64,
+  accuracy: f64,
+) -> Result<(f64, f64), &'a str> {
+  let days_frm_perih = t - T;
 
-    t        : f64,
-    T        : f64,
-    ecc      : f64,
-    q        : f64,
-    accuracy : f64
+  if days_frm_perih == 0.0 {
+    return Ok((0.0, q));
+  }
 
-) -> Result<(f64, f64), &'a str>  {
+  let k = consts::GAUSS_GRAV;
+  let d1 = 1000.0;
 
-    let days_frm_perih = t - T;
+  let q1 = k * ((1.0 + ecc) / q).sqrt() / (2.0 * q);
+  let g = (1.0 - ecc) / (1.0 + ecc);
 
-    if days_frm_perih == 0.0 {
-        return Ok((0.0, q))
-    }
+  let q2 = q1 * days_frm_perih;
+  let mut s = 2.0 / (3.0 * q2.abs());
+  s = 2.0 / (2.0 * (s.atan() / 2.0).tan().cbrt().atan()).tan();
 
-    let k = consts::GAUSS_GRAV;
-    let d1 = 1000.0;
+  if days_frm_perih < 0.0 {
+    s = -s;
+  }
+  if ecc != 1.0 {
+    let mut l = 0.0;
+    loop {
+      let s0 = s;
+      let mut z = 1.0;
+      let y = s * s;
+      let mut g1 = -y * s;
+      let mut q3 = q2 + g * s * y * 2.0 / 3.0;
 
-    let q1 = k * ((1.0 + ecc)/q).sqrt() / (2.0*q);
-    let g = (1.0 - ecc) / (1.0 + ecc);
-
-    let q2 = q1 * days_frm_perih;
-    let mut s = 2.0 / (3.0 * q2.abs());
-    s = 2.0 / (2.0 * (s.atan() / 2.0).tan().cbrt().atan()).tan();
-
-    if days_frm_perih < 0.0 { s = -s; }
-    if ecc != 1.0 {
-        let mut l = 0.0;
-        loop {
-            let s0 = s;
-            let mut z = 1.0;
-            let y = s * s;
-            let mut g1 = -y * s;
-            let mut q3 = q2 + g*s*y*2.0/3.0;
-
-            loop {
-                z += 1.0;
-                g1 = -g1 * g * y;
-                let z1 = (z - (z + 1.0)*g) / (2.0*z + 1.0);
-                let f = z1 * g1;
-                q3 += f;
-                if z > 50.0 || f.abs() > d1 {
-                    return Err("No convergence at orbit::near_parabolic::true_anom_and_rad_vec()");
-                }
-                if f.abs() <= accuracy { break; }
-            }
-
-            l += 1.0;
-            if l > 50.0 {
-                return Err("No convergence at orbit::near_parabolic::true_anom_and_rad_vec()");
-            }
-
-            loop {
-                let s1 = s;
-                s = (s*s*s*2.0/3.0 + q3)/(s*s + 1.0);
-                if (s - s1).abs() <= accuracy { break; }
-            }
-
-            if (s - s0).abs() <= accuracy { break; }
+      loop {
+        z += 1.0;
+        g1 = -g1 * g * y;
+        let z1 = (z - (z + 1.0) * g) / (2.0 * z + 1.0);
+        let f = z1 * g1;
+        q3 += f;
+        if z > 50.0 || f.abs() > d1 {
+          return Err(
+            "No convergence at orbit::near_parabolic::true_anom_and_rad_vec()",
+          );
         }
+        if f.abs() <= accuracy {
+          break;
+        }
+      }
+
+      l += 1.0;
+      if l > 50.0 {
+        return Err(
+          "No convergence at orbit::near_parabolic::true_anom_and_rad_vec()",
+        );
+      }
+
+      loop {
+        let s1 = s;
+        s = (s * s * s * 2.0 / 3.0 + q3) / (s * s + 1.0);
+        if (s - s1).abs() <= accuracy {
+          break;
+        }
+      }
+
+      if (s - s0).abs() <= accuracy {
+        break;
+      }
     }
+  }
 
-    let v = angle::limit_to_two_PI(2.0 * s.atan());
-    let r = q * (1.0 + ecc) / (1.0 + ecc*v.cos());
+  let v = angle::limit_to_two_PI(2.0 * s.atan());
+  let r = q * (1.0 + ecc) / (1.0 + ecc * v.cos());
 
-    Ok((v, r))
-
+  Ok((v, r))
 }

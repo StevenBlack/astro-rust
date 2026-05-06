@@ -24,15 +24,14 @@ THE SOFTWARE.
 
 /// Returns a float rounded upto a certain number of decimal digits
 #[inline]
-pub fn round_upto_digits(float: f64, decimal_digits: u32) -> f64
-{
-    let mut d = 1.0;
+pub fn round_upto_digits(float: f64, decimal_digits: u32) -> f64 {
+  let mut d = 1.0;
 
-    for _ in 1..(decimal_digits + 1) {
-        d *= 10.0;
-    }
+  for _ in 1..(decimal_digits + 1) {
+    d *= 10.0;
+  }
 
-    (float * d).round() / d
+  (float * d).round() / d
 }
 
 /**
