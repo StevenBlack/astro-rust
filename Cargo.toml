@@ -3,6 +3,7 @@
 name = "astro"
 version = "2.0.0"
 authors = ["Saurav Sachidanand"]
+edition = "2024"
 
 license = "MIT"
 
