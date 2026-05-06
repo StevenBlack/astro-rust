@@ -1,0 +1,13 @@
+# Indentation
+tab_spaces = 2
+hard_tabs = false
+
+# Line width (default is 100)
+max_width = 80
+
+# Edition (match your Cargo.toml to keep cargo fmt consistent)
+edition = "2024"
+style_edition = "2024"
+
+# Unstable features (requires nightly if you use any above)
+# unstable_features = true
