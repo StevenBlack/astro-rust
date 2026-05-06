@@ -22,10 +22,10 @@ THE SOFTWARE.
 
 //! The Sun
 
-use angle;
-use time;
-use planet;
-use coords;
+use crate::angle;
+use crate::time;
+use crate::planet;
+use crate::coords;
 
 /**
 Computes the Sun's equatorial semidiameter

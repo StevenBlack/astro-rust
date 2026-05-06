@@ -22,7 +22,7 @@ THE SOFTWARE.
 
 //! Time for astronomy
 
-use angle;
+use crate::angle;
 
 /// Represents a calendar type
 #[derive(Debug)]

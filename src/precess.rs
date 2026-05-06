@@ -22,8 +22,8 @@ THE SOFTWARE.
 
 //! Corrections for precession
 
-use angle;
-use time;
+use crate::angle;
+use crate::time;
 
 /**
 Computes annual precession in equatorial coordinates towards a new
