@@ -3,7 +3,7 @@ tab_spaces = 2
 hard_tabs = false
 
 # Line width (default is 100)
-max_width = 80
+max_width = 100
 
 # Edition (match your Cargo.toml to keep cargo fmt consistent)
 edition = "2024"
