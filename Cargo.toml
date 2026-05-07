@@ -12,3 +12,8 @@ documentation = "https://saurvs.github.io/astro-rust"
 
 description = "Advanced algorithms for astronomy"
 keywords = ["astronomy", "algorithms", "ephemeris", "planet", "solar"]
+
+[lints.clippy]
+approx_constant = "allow"
+doc_lazy_continuation = "allow"
+doc_overindented_list_items = "allow"
