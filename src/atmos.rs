@@ -40,11 +40,9 @@ degrees
 * `apprnt_alt`: Apparent altitude *| in radians*
 **/
 pub fn refrac_frm_apprnt_alt_15(apprnt_alt: f64) -> f64 {
-  let x =
-    angle::deg_frm_dms(0, 0, 0.0668).to_radians() * (PI - apprnt_alt).tan();
+  let x = angle::deg_frm_dms(0, 0, 0.0668).to_radians() * (PI - apprnt_alt).tan();
 
-  angle::deg_frm_dms(0, 0, 58.294).to_radians() * (PI - apprnt_alt).tan()
-    - x * x * x
+  angle::deg_frm_dms(0, 0, 58.294).to_radians() * (PI - apprnt_alt).tan() - x * x * x
 }
 
 /**
@@ -64,8 +62,7 @@ degrees
 pub fn refrac_frm_true_alt_15(true_alt: f64) -> f64 {
   let x = angle::deg_frm_dms(0, 0, 0.0824).to_radians() * (PI - true_alt).tan();
 
-  angle::deg_frm_dms(0, 0, 58.276).to_radians() * (PI - true_alt).tan()
-    - x * x * x
+  angle::deg_frm_dms(0, 0, 58.276).to_radians() * (PI - true_alt).tan() - x * x * x
 }
 
 /**

@@ -104,24 +104,17 @@ pub fn time(
 
   let d = m + delta_t / 86400.0;
 
-  let asc =
-    interpol::three_values(eq_point1.asc, eq_point2.asc, eq_point3.asc, d);
+  let asc = interpol::three_values(eq_point1.asc, eq_point2.asc, eq_point3.asc, d);
 
   let dec = match *transit_type {
     TransitType::Transit => 0.0,
 
-    TransitType::Rise => {
-      interpol::three_values(eq_point1.dec, eq_point2.dec, eq_point3.dec, d)
-    }
+    TransitType::Rise => interpol::three_values(eq_point1.dec, eq_point2.dec, eq_point3.dec, d),
 
-    TransitType::Set => {
-      interpol::three_values(eq_point1.dec, eq_point2.dec, eq_point3.dec, d)
-    }
+    TransitType::Set => interpol::three_values(eq_point1.dec, eq_point2.dec, eq_point3.dec, d),
   };
 
-  let mut H =
-    coords::hr_angl_frm_observer_long(theta0, geograph_point.long, asc)
-      .to_degrees();
+  let mut H = coords::hr_angl_frm_observer_long(theta0, geograph_point.long, asc).to_degrees();
   H = angle::limit_to_360(H);
   if H > 180.0 {
     H -= 360.0;
@@ -137,13 +130,9 @@ pub fn time(
   m += match *transit_type {
     TransitType::Transit => -H / angle::TWO_PI,
     TransitType::Rise => {
-      (h - h0)
-        / (angle::TWO_PI * dec.cos() * geograph_point.lat.cos() * H.sin())
+      (h - h0) / (angle::TWO_PI * dec.cos() * geograph_point.lat.cos() * H.sin())
     }
-    TransitType::Set => {
-      (h - h0)
-        / (angle::TWO_PI * dec.cos() * geograph_point.lat.cos() * H.sin())
-    }
+    TransitType::Set => (h - h0) / (angle::TWO_PI * dec.cos() * geograph_point.lat.cos() * H.sin()),
   };
 
   let h = 24.0 * m;
@@ -156,13 +145,7 @@ pub fn time(
 }
 
 #[inline]
-fn m(
-  transit_type: &TransitType,
-  H0: f64,
-  asc: f64,
-  L: f64,
-  Theta0: f64,
-) -> f64 {
+fn m(transit_type: &TransitType, H0: f64, asc: f64, L: f64, Theta0: f64) -> f64 {
   let mut m = (asc + L - Theta0) / angle::TWO_PI;
   let p = H0 / angle::TWO_PI;
 

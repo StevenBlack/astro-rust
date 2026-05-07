@@ -93,12 +93,7 @@ of Jupiter
 * `nut_in_long`: Nutation in ecliptic longitude on `JD` *| in radians*
 * `nut_in_oblq`: Nutation in obliquity of the ecliptic on `JD` *| in radians*
 **/
-pub fn ephemeris(
-  JD: f64,
-  mn_oblq: f64,
-  nut_in_long: f64,
-  nut_in_oblq: f64,
-) -> Ephemeris {
+pub fn ephemeris(JD: f64, mn_oblq: f64, nut_in_long: f64, nut_in_oblq: f64) -> Ephemeris {
   let d = JD - 2433282.5;
   let T1 = d / 36525.0;
 
@@ -119,14 +114,12 @@ pub fn ephemeris(
 
   let mut i: u8 = 1;
   while i <= 2 {
-    let (new_l, new_b, new_r) =
-      planet::heliocent_coords(&planet::Planet::Jupiter, JD - light_time);
+    let (new_l, new_b, new_r) = planet::heliocent_coords(&planet::Planet::Jupiter, JD - light_time);
     l = new_l;
     b = new_b;
     r = new_r;
 
-    let (new_x, new_y, new_z) =
-      planet::geocent_ecl_rect_coords(l0, b0, R, l, b, r);
+    let (new_x, new_y, new_z) = planet::geocent_ecl_rect_coords(l0, b0, R, l, b, r);
     x = new_x;
     y = new_y;
     z = new_z;
@@ -141,38 +134,25 @@ pub fn ephemeris(
   let (x, y, z) = planet::geocent_ecl_rect_coords(l0, b0, R, l, b, r);
   jup_earth_dist = planet::dist_frm_ecl_rect_coords(x, y, z);
 
-  let asc_s =
-    (mn_oblq.cos() * l.sin() - mn_oblq.sin() * b.tan()).atan2(l.cos());
-  let dec_s =
-    (mn_oblq.cos() * b.sin() + mn_oblq.sin() * b.cos() * l.sin()).asin();
+  let asc_s = (mn_oblq.cos() * l.sin() - mn_oblq.sin() * b.tan()).atan2(l.cos());
+  let dec_s = (mn_oblq.cos() * b.sin() + mn_oblq.sin() * b.cos() * l.sin()).asin();
 
-  let D_s = (-dec0.sin() * dec_s.sin()
-    - dec0.cos() * dec_s.cos() * (asc0 - asc_s).cos())
-  .asin();
+  let D_s = (-dec0.sin() * dec_s.sin() - dec0.cos() * dec_s.cos() * (asc0 - asc_s).cos()).asin();
 
   let u = y * mn_oblq.cos() - z * mn_oblq.sin();
   let v = y * mn_oblq.sin() + z * mn_oblq.cos();
   let mut asc = u.atan2(x);
   let mut dec = v.atan2((x * x + u * u).sqrt());
-  let zeta = (dec0.sin() * dec.cos() * (asc0 - asc).cos()
-    - dec.sin() * dec0.cos())
-  .atan2(dec.cos() * (asc0 - asc).sin());
+  let zeta = (dec0.sin() * dec.cos() * (asc0 - asc).cos() - dec.sin() * dec0.cos())
+    .atan2(dec.cos() * (asc0 - asc).sin());
 
-  let D_e = (-dec0.sin() * dec.sin()
-    - dec0.cos() * dec.cos() * (asc0 - asc).cos())
-  .asin();
+  let D_e = (-dec0.sin() * dec.sin() - dec0.cos() * dec.cos() * (asc0 - asc).cos()).asin();
 
-  let mut w1 = angle::limit_to_360(
-    W1.to_degrees() - zeta.to_degrees() - 5.07033 * jup_earth_dist,
-  );
-  let mut w2 = angle::limit_to_360(
-    W2.to_degrees() - zeta.to_degrees() - 5.02626 * jup_earth_dist,
-  );
+  let mut w1 = angle::limit_to_360(W1.to_degrees() - zeta.to_degrees() - 5.07033 * jup_earth_dist);
+  let mut w2 = angle::limit_to_360(W2.to_degrees() - zeta.to_degrees() - 5.02626 * jup_earth_dist);
 
   let mut C = 57.2958
-    * (2.0 * r * jup_earth_dist + R * R
-      - r * r
-      - jup_earth_dist * jup_earth_dist)
+    * (2.0 * r * jup_earth_dist + R * R - r * r - jup_earth_dist * jup_earth_dist)
     / (4.0 * r * jup_earth_dist);
   if (l - l0).sin() < 0.0 {
     C *= -1.0
@@ -183,12 +163,9 @@ pub fn ephemeris(
   let tru_oblq = mn_oblq + nut_in_oblq;
 
   let q = 0.005693_f64.to_radians();
-  asc += q * (asc.cos() * l0.cos() * tru_oblq.cos() + asc.sin() * l0.sin())
-    / dec.cos();
+  asc += q * (asc.cos() * l0.cos() * tru_oblq.cos() + asc.sin() * l0.sin()) / dec.cos();
   dec += q
-    * (l0.cos()
-      * tru_oblq.cos()
-      * (tru_oblq.tan() * dec.cos() - asc.sin() * asc.cos())
+    * (l0.cos() * tru_oblq.cos() * (tru_oblq.tan() * dec.cos() - asc.sin() * asc.cos())
       + asc.cos() * dec.sin() * l0.sin());
 
   let (asc_nut, dec_nut) = nutation::nutation_in_eq_coords(
@@ -212,9 +189,8 @@ pub fn ephemeris(
   let asc01 = asc0 + asc0_nut;
   let dec01 = dec0 + dec0_nut;
 
-  let P = (dec01.cos() * (asc01 - asc1).sin()).atan2(
-    dec01.sin() * dec1.cos() - dec01.cos() * dec1.sin() * (asc01 - asc1).cos(),
-  );
+  let P = (dec01.cos() * (asc01 - asc1).sin())
+    .atan2(dec01.sin() * dec1.cos() - dec01.cos() * dec1.sin() * (asc01 - asc1).cos());
 
   Ephemeris {
     De: D_e,

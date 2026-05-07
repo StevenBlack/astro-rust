@@ -94,9 +94,8 @@ pub fn ecl_coords_to_FK5(JD: f64, ecl_long: f64, ecl_lat: f64) -> (f64, f64) {
   let JC = time::julian_cent(JD);
   let lambda1 = ecl_long - JC * (1.397 + JC * 0.00031).to_radians();
 
-  let ecl_lat_FK5 = ecl_lat
-    + angle::deg_frm_dms(0, 0, 0.03916).to_radians()
-      * (lambda1.cos() - lambda1.sin());
+  let ecl_lat_FK5 =
+    ecl_lat + angle::deg_frm_dms(0, 0, 0.03916).to_radians() * (lambda1.cos() - lambda1.sin());
 
   (ecl_long_FK5, ecl_lat_FK5)
 }
@@ -138,12 +137,10 @@ pub fn geocent_rect_coords(
   let x = sun_rad_vec * sun_geo_lat.cos() * sun_geo_long.cos();
 
   let y = sun_rad_vec
-    * (sun_geo_lat.cos() * sun_geo_long.sin() * mn_oblq.cos()
-      - sun_geo_lat.sin() * mn_oblq.sin());
+    * (sun_geo_lat.cos() * sun_geo_long.sin() * mn_oblq.cos() - sun_geo_lat.sin() * mn_oblq.sin());
 
   let z = sun_rad_vec
-    * (sun_geo_lat.cos() * sun_geo_long.sin() * mn_oblq.sin()
-      + sun_geo_lat.sin() * mn_oblq.cos());
+    * (sun_geo_lat.cos() * sun_geo_long.sin() * mn_oblq.sin() + sun_geo_lat.sin() * mn_oblq.cos());
 
   (x, y, z)
 }
@@ -181,8 +178,7 @@ pub fn ephemeris(
   app_long_with_nut: f64,
   oblq_eclip: f64,
 ) -> (f64, f64, f64) {
-  let theta =
-    angle::limit_to_360((JD - 2398220.0) * 360.0 / 25.38).to_radians();
+  let theta = angle::limit_to_360((JD - 2398220.0) * 360.0 / 25.38).to_radians();
   let I = 7.25_f64.to_radians();
   let K = (73.6667 + 1.3958333 * (JD - 2396758.0) / 36525.0).to_radians();
 

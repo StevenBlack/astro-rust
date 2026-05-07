@@ -52,34 +52,9 @@ pub fn true_anom_and_rad_vec(t: f64, T: f64, q: f64) -> (f64, f64) {
   (v, r)
 }
 
-/**
-Computes the time of passage of a body through a node of a parabolic
-orbit and it's radius vector at that time
-
-# Returns
-
-`(time_of_pass, rad_vec)`
-
-* `time_of_pass`: Time of passage through the node, in Julian
-                  (Ephemeris) day
-* `rad_vec`     : Radius vector of the body at the time of passage
-                  *| in AU*
-
-# Arguments
-
-* `w`   : Argument of the perihelion *| in radians*
-* `q`   : Perihelion distance *| in AU*
-* `T`   : Time of passage in perihelion, in Julian (Ephemeris) day
-* `node`: `Ascend` or `Descend` node
-**/
 
 #[inline]
-pub fn passage_through_node(
-  w: f64,
-  q: f64,
-  T: f64,
-  node: &orbit::Node,
-) -> (f64, f64) {
+pub fn passage_through_node(w: f64, q: f64, T: f64, node: &orbit::Node) -> (f64, f64) {
   match *node {
     orbit::Node::Ascend => pass_through_node(-w, q, T),
     orbit::Node::Descend => pass_through_node(std::f64::consts::PI - w, q, T),

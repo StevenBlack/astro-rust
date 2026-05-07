@@ -94,12 +94,7 @@ Computes apparent position angle of a binary star
                   plane at right angles to the
                   line of sight *| in radians*
 **/
-pub fn apprnt_coords_angl(
-  asc_node_coords: f64,
-  true_anom: f64,
-  w: f64,
-  i: f64,
-) -> f64 {
+pub fn apprnt_coords_angl(asc_node_coords: f64, true_anom: f64, w: f64, i: f64) -> f64 {
   let x = ((true_anom + w).sin() * i.cos()).atan2((true_anom + w).cos());
 
   angle::limit_to_two_PI(x + asc_node_coords)
@@ -118,10 +113,7 @@ Computes angular separation of a binary star
                line of sight *| in radians*
 **/
 pub fn anglr_sepr(rad_vec: f64, true_anom: f64, w: f64, i: f64) -> f64 {
-  rad_vec
-    * (((true_anom + w).sin() * i.cos()).powi(2)
-      + (true_anom + w).cos().powi(2))
-    .sqrt()
+  rad_vec * (((true_anom + w).sin() * i.cos()).powi(2) + (true_anom + w).cos().powi(2)).sqrt()
 }
 
 /**

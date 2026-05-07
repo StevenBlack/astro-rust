@@ -98,7 +98,6 @@ Computes the absolute magnitude of a star from its distance from earth
 * `d`: The star's to earth *(parsecs)*
 * `am`: Apparent magnitude of the star
 **/
-
 #[inline]
 pub fn abs_mag_frm_dist(d: f64, am: f64) -> f64 {
   am + 5.0 - 5.0 * d.log10()
@@ -126,9 +125,8 @@ pub fn angl_between_north_celes_and_eclip_pole(
   eclip_lat: f64,
   oblq_eclip: f64,
 ) -> f64 {
-  (eclip_long.cos() * oblq_eclip.tan()).atan2(
-    eclip_lat.sin() * eclip_long.sin() * oblq_eclip.tan() - eclip_lat.cos(),
-  )
+  (eclip_long.cos() * oblq_eclip.tan())
+    .atan2(eclip_lat.sin() * eclip_long.sin() * oblq_eclip.tan() - eclip_lat.cos())
 }
 
 /**
@@ -204,13 +202,11 @@ pub fn proper_motion_in_eq_coords(
   let pmotion_long = (pmotion_dec * oblq_eclip.sin() * asc.cos()
     + pmotion_asc
       * dec.cos()
-      * (oblq_eclip.cos() * dec.cos()
-        + oblq_eclip.sin() * dec.sin() * asc.sin()))
+      * (oblq_eclip.cos() * dec.cos() + oblq_eclip.sin() * dec.sin() * asc.sin()))
     / (ecl_lat_cos * ecl_lat_cos);
 
   let pmotion_lat = (pmotion_dec
-    * (oblq_eclip.cos() * dec.cos()
-      + oblq_eclip.sin() * dec.sin() * asc.sin())
+    * (oblq_eclip.cos() * dec.cos() + oblq_eclip.sin() * dec.sin() * asc.sin())
     - pmotion_asc * oblq_eclip.sin() * asc.cos() * dec.cos())
     / ecl_lat_cos;
 

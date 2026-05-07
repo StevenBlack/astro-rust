@@ -87,9 +87,7 @@ pub fn true_anom_and_rad_vec<'a>(
         let f = z1 * g1;
         q3 += f;
         if z > 50.0 || f.abs() > d1 {
-          return Err(
-            "No convergence at orbit::near_parabolic::true_anom_and_rad_vec()",
-          );
+          return Err("No convergence at orbit::near_parabolic::true_anom_and_rad_vec()");
         }
         if f.abs() <= accuracy {
           break;
@@ -98,9 +96,7 @@ pub fn true_anom_and_rad_vec<'a>(
 
       l += 1.0;
       if l > 50.0 {
-        return Err(
-          "No convergence at orbit::near_parabolic::true_anom_and_rad_vec()",
-        );
+        return Err("No convergence at orbit::near_parabolic::true_anom_and_rad_vec()");
       }
 
       loop {

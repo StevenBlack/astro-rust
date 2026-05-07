@@ -77,10 +77,7 @@ Assumes that the Earth is a sphere.
 * `p2`: `GeographPoint` 2
 **/
 #[inline]
-pub fn approx_geodesic_dist(
-  p1: &coords::GeographPoint,
-  p2: &coords::GeographPoint,
-) -> f64 {
+pub fn approx_geodesic_dist(p1: &coords::GeographPoint, p2: &coords::GeographPoint) -> f64 {
   6371.0 * p1.anglr_sepr(p2)
 }
 
@@ -93,10 +90,7 @@ surface *| in kilometers*
 * `p1`: `GeographPoint` 1
 * `p2`: `GeographPoint` 2
 **/
-pub fn geodesic_dist(
-  p1: &coords::GeographPoint,
-  p2: &coords::GeographPoint,
-) -> f64 {
+pub fn geodesic_dist(p1: &coords::GeographPoint, p2: &coords::GeographPoint) -> f64 {
   let f = (p1.lat + p2.lat) / 2.0;
   let g = (p1.lat - p2.lat) / 2.0;
   let lam = (p1.long - p2.long) / 2.0;
@@ -159,8 +153,7 @@ ellipsoid
                   ellipsoid *| in radians*
 **/
 pub fn rho(geograph_lat: f64) -> f64 {
-  0.9983271 + 0.0016764 * (2.0 * geograph_lat).cos()
-    - 0.0000035 * (4.0 * geograph_lat).cos()
+  0.9983271 + 0.0016764 * (2.0 * geograph_lat).cos() - 0.0000035 * (4.0 * geograph_lat).cos()
 }
 
 /// Returns the rotational angular velocity of the Earth
@@ -186,8 +179,7 @@ Computes the radius of the parallel of a latitude
 pub fn rad_of_parll_lat(geograph_lat: f64) -> f64 {
   let e = ecc_of_meridian();
 
-  eq_rad() * geograph_lat.cos()
-    / (1.0 - (e * geograph_lat.sin()).powi(2)).sqrt()
+  eq_rad() * geograph_lat.cos() / (1.0 - (e * geograph_lat.sin()).powi(2)).sqrt()
 }
 
 /**
@@ -256,25 +248,16 @@ Computes the equation of time *| in radians*
 * `nut_log` : Nutation correction for longitude *| in radians*
 * `tru_oblq`: True obliquity of the ecliptic *| in radians*
 **/
-pub fn equation_of_time(
-  JD: f64,
-  sun_asc: f64,
-  nut_long: f64,
-  tru_oblq: f64,
-) -> f64 {
+pub fn equation_of_time(JD: f64, sun_asc: f64, nut_long: f64, tru_oblq: f64) -> f64 {
   let t = time::julian_mill(JD);
   let L = angle::limit_to_360(
     280.4664567
       + t
         * (360007.6982779
-          + t
-            * (0.030328
-              + t * (1.0 / 49931.0 - t * (1.0 / 15300.0 + t / 2000000.0)))),
+          + t * (0.030328 + t * (1.0 / 49931.0 - t * (1.0 / 15300.0 + t / 2000000.0)))),
   );
 
-  (L - 0.0057183 - sun_asc.to_degrees()
-    + nut_long.to_degrees() * tru_oblq.cos())
-  .to_radians()
+  (L - 0.0057183 - sun_asc.to_degrees() + nut_long.to_degrees() * tru_oblq.cos()).to_radians()
 }
 
 /**

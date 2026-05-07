@@ -127,8 +127,7 @@ pub fn ephemeris(
   nut_in_long: f64,
   nut_in_oblq: f64,
 ) -> Ephemeris {
-  let (mut lambda0, beta0) =
-    (north_pole_ecl_coords.long, north_pole_ecl_coords.lat);
+  let (mut lambda0, beta0) = (north_pole_ecl_coords.long, north_pole_ecl_coords.lat);
 
   let (l0, b0, R) = planet::heliocent_coords(&planet::Planet::Earth, JD);
 
@@ -139,14 +138,12 @@ pub fn ephemeris(
 
   let mut i: u8 = 1;
   while i <= 2 {
-    let (new_l, new_b, new_r) =
-      planet::heliocent_coords(&planet::Planet::Mars, JD - light_time);
+    let (new_l, new_b, new_r) = planet::heliocent_coords(&planet::Planet::Mars, JD - light_time);
     l = new_l;
     b = new_b;
     r = new_r;
 
-    let (new_x, new_y, new_z) =
-      planet::geocent_ecl_rect_coords(l0, b0, R, l, b, r);
+    let (new_x, new_y, new_z) = planet::geocent_ecl_rect_coords(l0, b0, R, l, b, r);
     x = new_x;
     y = new_y;
     z = new_z;
@@ -159,22 +156,17 @@ pub fn ephemeris(
 
   let (mut lambda, mut beta) = planet::ecl_coords_frm_ecl_rect_coords(x, y, z);
 
-  let D_e = (-beta0.sin() * beta.sin()
-    - beta0.cos() * beta.cos() * (lambda0 - lambda).cos())
-  .asin();
+  let D_e =
+    (-beta0.sin() * beta.sin() - beta0.cos() * beta.cos() * (lambda0 - lambda).cos()).asin();
 
   let JC = time::julian_cent(JD);
   let N = (49.5581 + 0.7721 * JC).to_radians();
 
   let l1 = l - (0.00697 / r).to_radians();
   let b1 = b - (0.000225 * (l - N).cos() / r).to_radians();
-  let D_s = (-beta0.sin() * b1.sin()
-    - beta0.cos() * b1.cos() * (lambda0 - l1).cos())
-  .asin();
+  let D_s = (-beta0.sin() * b1.sin() - beta0.cos() * b1.cos() * (lambda0 - l1).cos()).asin();
 
-  let W =
-    angle::limit_to_360(11.504 + 350.89200025 * (JD - light_time - 2433282.5))
-      .to_radians();
+  let W = angle::limit_to_360(11.504 + 350.89200025 * (JD - light_time - 2433282.5)).to_radians();
 
   let asc0 = coords::asc_frm_ecl(lambda0, beta0, mn_oblq);
   let dec0 = coords::dec_frm_ecl(lambda0, beta0, mn_oblq);
@@ -183,9 +175,8 @@ pub fn ephemeris(
   let v = y * mn_oblq.sin() + z * mn_oblq.cos();
   let asc = u.atan2(x);
   let dec = v.atan2((x * x + u * u).sqrt());
-  let zeta = (dec0.sin() * dec.cos() * (asc0 - asc).cos()
-    - dec.sin() * dec0.cos())
-  .atan2(dec.cos() * (asc0 - asc).sin());
+  let zeta = (dec0.sin() * dec.cos() * (asc0 - asc).cos() - dec.sin() * dec0.cos())
+    .atan2(dec.cos() * (asc0 - asc).sin());
   let w = W - zeta;
 
   lambda += 0.005693_f64.to_radians() * (l0 - lambda).cos() / beta.cos();
@@ -200,9 +191,8 @@ pub fn ephemeris(
   let asc1 = coords::asc_frm_ecl(lambda, beta, true_oblq);
   let dec1 = coords::dec_frm_ecl(lambda, beta, true_oblq);
 
-  let P = (dec01.cos() * (asc01 - asc1).sin()).atan2(
-    dec01.sin() * dec1.cos() - dec01.cos() * dec1.sin() * (asc01 - asc1).cos(),
-  );
+  let P = (dec01.cos() * (asc01 - asc1).sin())
+    .atan2(dec01.sin() * dec1.cos() - dec01.cos() * dec1.sin() * (asc01 - asc1).cos());
 
   let d = angle::deg_frm_dms(0, 0, 9.36).to_radians() / mars_earth_dist;
   let k = planet::illum_frac_frm_dist(r, mars_earth_dist, R);

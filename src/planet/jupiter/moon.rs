@@ -88,20 +88,15 @@ pub fn apprnt_rect_coords(JD: f64, moon: &Moon) -> (f64, f64) {
   let d_minus_delta_by_173 = d - delta / 173.0;
   let phi_minus_B = phi - B;
 
-  let u1 =
-    (163.8069 + 203.4058646 * d_minus_delta_by_173).to_radians() + phi_minus_B;
-  let u2 =
-    (358.414 + 101.2916335 * d_minus_delta_by_173).to_radians() + phi_minus_B;
-  let u3 =
-    (5.7176 + 50.234518 * d_minus_delta_by_173).to_radians() + phi_minus_B;
+  let u1 = (163.8069 + 203.4058646 * d_minus_delta_by_173).to_radians() + phi_minus_B;
+  let u2 = (358.414 + 101.2916335 * d_minus_delta_by_173).to_radians() + phi_minus_B;
+  let u3 = (5.7176 + 50.234518 * d_minus_delta_by_173).to_radians() + phi_minus_B;
 
   let mut u = match *moon {
     Moon::Io => u1,
     Moon::Europa => u2,
     Moon::Ganymede => u3,
-    Moon::Callisto => {
-      (224.8092 + 21.48798 * d_minus_delta_by_173).to_radians() + phi_minus_B
-    }
+    Moon::Callisto => (224.8092 + 21.48798 * d_minus_delta_by_173).to_radians() + phi_minus_B,
   };
 
   let G = (331.18 + 50.310482 * d_minus_delta_by_173).to_radians();

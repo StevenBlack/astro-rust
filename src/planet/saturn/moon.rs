@@ -212,10 +212,7 @@ fn Mimas(info: &Info) -> (f64, f64, f64, f64) {
 
   let p = (106.1 + 365.549 * info.t2).to_radians();
   let M = L - p;
-  let C = (2.18287 * M.sin()
-    + 0.025988 * (2.0 * M).sin()
-    + 0.00043 * (3.0 * M).sin())
-  .to_radians();
+  let C = (2.18287 * M.sin() + 0.025988 * (2.0 * M).sin() + 0.00043 * (3.0 * M).sin()).to_radians();
 
   let lambda_1 = L + C;
   let gamma_1 = 1.563_f64.to_radians();
@@ -227,11 +224,8 @@ fn Mimas(info: &Info) -> (f64, f64, f64, f64) {
 
 #[inline(always)]
 fn Enceladus(info: &Info) -> (f64, f64, f64, f64) {
-  let L = (200.317
-    + 262.7319002 * info.t1
-    + 0.25667 * info.W1.sin()
-    + 0.20883 * info.W2.sin())
-  .to_radians();
+  let L = (200.317 + 262.7319002 * info.t1 + 0.25667 * info.W1.sin() + 0.20883 * info.W2.sin())
+    .to_radians();
 
   let p = (309.107 + 123.44121 * info.t2).to_radians();
   let M = L - p;
@@ -262,10 +256,8 @@ fn Tethys(info: &Info) -> (f64, f64, f64, f64) {
 
 #[inline(always)]
 fn Dione(info: &Info) -> (f64, f64, f64, f64) {
-  let L = (254.712 + 131.53493193 * info.t1
-    - 0.0215 * info.W1.sin()
-    - 0.01733 * info.W2.sin())
-  .to_radians();
+  let L = (254.712 + 131.53493193 * info.t1 - 0.0215 * info.W1.sin() - 0.01733 * info.W2.sin())
+    .to_radians();
 
   let p = (174.8 + 30.82 * info.t2).to_radians();
   let M = L - p;
@@ -287,11 +279,9 @@ fn Rhea(info: &Info) -> (f64, f64, f64, f64) {
   let e = (a1 * a1 + a2 * a2).sqrt();
   let p = a1.atan2(a2);
   let N = (345.0 - 10.057 * info.t2).to_radians();
-  let lambda1 =
-    (359.244 + 79.6900472 * info.t1 + 0.086754 * N.sin()).to_radians();
+  let lambda1 = (359.244 + 79.6900472 * info.t1 + 0.086754 * N.sin()).to_radians();
   let i = (28.0362 + 0.346898 * N.cos() + 0.0193 * info.W3.cos()).to_radians();
-  let Omega =
-    (168.8034 + 0.736936 * N.sin() + 0.041 * info.W3.sin()).to_radians();
+  let Omega = (168.8034 + 0.736936 * N.sin() + 0.041 * info.W3.sin()).to_radians();
   let a = 8.725924;
 
   funroutine(e, a, Omega, i, lambda1, p, info)
@@ -299,13 +289,11 @@ fn Rhea(info: &Info) -> (f64, f64, f64, f64) {
 
 #[inline(always)]
 fn Titan(info: &Info) -> (f64, f64, f64, f64) {
-  let L =
-    (261.1582 + 22.57697855 * info.t4 + 0.074025 * info.W3.sin()).to_radians();
+  let L = (261.1582 + 22.57697855 * info.t4 + 0.074025 * info.W3.sin()).to_radians();
   let i1 = (27.45141 + 0.295999 * info.W3.cos()).to_radians();
   let Omega1 = (168.66925 + 0.628808 * info.W3.sin()).to_radians();
   let a1 = info.W7.sin() * (Omega1 - info.W8).sin();
-  let a2 = info.W7.cos() * i1.sin()
-    - info.W7.sin() * i1.cos() * (Omega1 - info.W8).cos();
+  let a2 = info.W7.cos() * i1.sin() - info.W7.sin() * i1.cos() * (Omega1 - info.W8).cos();
   let g0 = 102.8623_f64.to_radians();
   let phi = a1.atan2(a2);
   let s = (a1 * a1 + a2 * a2).sqrt();
@@ -315,8 +303,7 @@ fn Titan(info: &Info) -> (f64, f64, f64, f64) {
   let mut counter: u8 = 1;
   while counter <= 6 {
     // Meeus says 3 iterations are always sufficient nough, but let's just be on the safer side
-    w_dash =
-      info.W4 + 0.37515_f64.to_radians() * ((2.0 * g).sin() - (2.0 * g0).sin());
+    w_dash = info.W4 + 0.37515_f64.to_radians() * ((2.0 * g).sin() - (2.0 * g0).sin());
     g = w_dash - Omega1 - phi;
     counter += 1;
   }
@@ -324,18 +311,15 @@ fn Titan(info: &Info) -> (f64, f64, f64, f64) {
   let e1 = 0.029092 + 0.00019048 * ((2.0 * g).cos() - (2.0 * g0).cos());
   let q = 2.0 * (info.W5 - w_dash);
   let b1 = i1.sin() * (Omega1 - info.W8).sin();
-  let b2 = info.W7.cos() * i1.sin() * (Omega1 - info.W8).cos()
-    - info.W7.sin() * i1.cos();
+  let b2 = info.W7.cos() * i1.sin() * (Omega1 - info.W8).cos() - info.W7.sin() * i1.cos();
   let theta = b1.atan2(b2) + info.W8;
   let e = e1 * (1.0 + 0.002778797 * q.cos());
   let p = w_dash + 0.159215_f64.to_radians() * q.sin();
   let u = 2.0 * (info.W5 - theta) + phi;
-  let h = 0.9375 * e1 * e1 * q.sin()
-    + 0.1875 * s * s * (2.0 * (info.W5 - theta)).sin();
+  let h = 0.9375 * e1 * e1 * q.sin() + 0.1875 * s * s * (2.0 * (info.W5 - theta)).sin();
   let lambda1 = L
     - 0.254744_f64.to_radians()
-      * (info.e1 * (info.W6.sin() + 0.75 * info.e1 * (2.0 * info.W6).sin())
-        + h);
+      * (info.e1 * (info.W6.sin() + 0.75 * info.e1 * (2.0 * info.W6).sin()) + h);
   let i = i1 + 0.031843_f64.to_radians() * s * u.cos();
   let Omega = Omega1 + 0.031843_f64.to_radians() * s * u.sin() / i1.sin();
   let a = 20.216193;
@@ -355,8 +339,7 @@ fn Hyperion(info: &Info) -> (f64, f64, f64, f64) {
   let w_dash = (69.898 - 18.67088 * info.t8).to_radians();
   let phi = 2.0 * (w_dash - info.W5);
   let xi = (94.9 - 2.292 * info.t8).to_radians();
-  let a = 24.50601 - 0.08686 * nu.cos() - 0.00166 * (et + nu).cos()
-    + 0.00175 * (et - nu).cos();
+  let a = 24.50601 - 0.08686 * nu.cos() - 0.00166 * (et + nu).cos() + 0.00175 * (et - nu).cos();
   let e = 0.103458 - 0.004099 * nu.cos() - 0.000167 * (et + nu).cos()
     + 0.000235 * (et - nu).cos()
     + 0.02303 * et.cos()
@@ -387,13 +370,10 @@ fn Hyperion(info: &Info) -> (f64, f64, f64, f64) {
     + 0.017 * b_s.sin()
     - 0.0303 * phi.sin())
   .to_radians();
-  let i = (27.3347
-    + 0.643486 * xi.cos()
-    + 0.315 * info.W3.cos()
-    + 0.018 * (theta.cos() - c_s.cos()))
-  .to_radians();
-  let Omega = (168.6812 + 1.40136 * xi.cos() + 0.68599 * info.W3.sin()
-    - 0.0392 * c_s.sin()
+  let i =
+    (27.3347 + 0.643486 * xi.cos() + 0.315 * info.W3.cos() + 0.018 * (theta.cos() - c_s.cos()))
+      .to_radians();
+  let Omega = (168.6812 + 1.40136 * xi.cos() + 0.68599 * info.W3.sin() - 0.0392 * c_s.sin()
     + 0.0366 * theta1.sin())
   .to_radians();
 
@@ -411,12 +391,8 @@ fn Iapetus(info: &Info) -> (f64, f64, f64, f64) {
   let e1 = 0.028298 + 0.001156 * info.t11;
   let w_dash0 = (352.91 + 11.71 * info.t11).to_radians();
   let mu = (76.3852 + 4.53795125 * info.t10).to_radians();
-  let i1 = (18.4602
-    - info.t11 * (0.9518 + info.t11 * (0.072 - 0.0054 * info.t11)))
-    .to_radians();
-  let Omega1 = (143.198
-    - info.t11 * (3.919 - info.t11 * (0.116 + 0.008 * info.t11)))
-    .to_radians();
+  let i1 = (18.4602 - info.t11 * (0.9518 + info.t11 * (0.072 - 0.0054 * info.t11))).to_radians();
+  let Omega1 = (143.198 - info.t11 * (3.919 - info.t11 * (0.116 + 0.008 * info.t11))).to_radians();
   let l = mu - w_dash0;
   let g = w_dash0 - Omega1 - Phi;
   let g1 = w_dash0 - Omega1 - phi;
@@ -436,8 +412,7 @@ fn Iapetus(info: &Info) -> (f64, f64, f64, f64) {
     + 0.0002408 * l.cos()
     + 0.0002849 * (l + u2).cos()
     + 0.000619 * u4.cos();
-  let w = (0.08077 * (g1 - gT).sin() + 0.02139 * (u5 - 2.0 * g).sin()
-    - 0.00676 * u3.sin()
+  let w = (0.08077 * (g1 - gT).sin() + 0.02139 * (u5 - 2.0 * g).sin() - 0.00676 * u3.sin()
     + 0.0138 * l.sin()
     + 0.01632 * (l + u2).sin()
     + 0.03547 * u4.sin())
@@ -481,9 +456,7 @@ fn funroutine(
         * ((1.25 - 0.458333333 * e * e) * (2.0 * M).sin()
           + e
             * ((1.083333333 - 0.671875 * e * e) * (3.0 * M).sin()
-              + e
-                * (1.072917 * (4.0 * M).sin()
-                  + e * 1.142708 * (5.0 * M).sin()))));
+              + e * (1.072917 * (4.0 * M).sin() + e * 1.142708 * (5.0 * M).sin()))));
   let r = a * (1.0 - e * e) / (1.0 + e * (M + C).cos());
   let g = Omega - 168.8112_f64.to_radians();
   let a1 = i.sin() * g.sin();
@@ -547,13 +520,7 @@ fn XYZ(
 }
 
 // does fancy stuff and computes (X, Y, Z, D)
-fn D(
-  X_j: f64,
-  Y_j: f64,
-  Z_j: f64,
-  D_j: f64,
-  info: &Info,
-) -> (f64, f64, f64, f64) {
+fn D(X_j: f64, Y_j: f64, Z_j: f64, D_j: f64, info: &Info) -> (f64, f64, f64, f64) {
   let A1 = X_j;
   let B1 = info.c1 * Y_j - info.s1 * Z_j;
   let C1 = info.s1 * Y_j + info.c1 * Z_j;

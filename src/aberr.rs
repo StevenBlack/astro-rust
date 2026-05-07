@@ -58,10 +58,7 @@ Computes stellar aberration in equatorial coordinates
 * `stell_eq_point`: Equatorial coordinates of the star *| in radians*
 * `JD`            : Julian (Ephemeris) day
 **/
-pub fn stell_aberr_in_eq_coords(
-  stell_eq_point: &coords::EqPoint,
-  JD: f64,
-) -> (f64, f64) {
+pub fn stell_aberr_in_eq_coords(stell_eq_point: &coords::EqPoint, JD: f64) -> (f64, f64) {
   let t = time::julian_cent(JD);
 
   let l2 = 3.1761467 + 1021.3285546 * t;
@@ -375,8 +372,7 @@ pub fn stell_aberr_in_eq_coords(
   let (asc, dec) = (stell_eq_point.asc, stell_eq_point.dec);
 
   let delta_asc = (y * asc.cos() - x * asc.sin()) / (c * dec.cos());
-  let delta_dec =
-    -((x * asc.cos() + y * asc.sin()) * dec.sin() - z * dec.cos()) / c;
+  let delta_dec = -((x * asc.cos() + y * asc.sin()) * dec.sin() - z * dec.cos()) / c;
 
   (delta_asc, delta_dec)
 }

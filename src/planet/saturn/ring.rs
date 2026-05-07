@@ -81,14 +81,12 @@ pub fn elements(JD: f64, nut_in_long: f64, true_oblq: f64) -> Elements {
 
   let mut i: u8 = 1;
   while i <= 2 {
-    let (new_l, new_b, new_r) =
-      planet::heliocent_coords(&planet::Planet::Saturn, JD - light_time);
+    let (new_l, new_b, new_r) = planet::heliocent_coords(&planet::Planet::Saturn, JD - light_time);
     l = new_l;
     b = new_b;
     r = new_r;
 
-    let (new_x, new_y, new_z) =
-      planet::geocent_ecl_rect_coords(l0, b0, R, l, b, r);
+    let (new_x, new_y, new_z) = planet::geocent_ecl_rect_coords(l0, b0, R, l, b, r);
     x = new_x;
     y = new_y;
     z = new_z;
@@ -104,11 +102,8 @@ pub fn elements(JD: f64, nut_in_long: f64, true_oblq: f64) -> Elements {
   let ascend_node = ascend_node(JC);
 
   let (mut lambda, mut beta) = planet::ecl_coords_frm_ecl_rect_coords(x, y, z);
-  let B = (inc.sin() * beta.cos() * (lambda - ascend_node).sin()
-    - inc.cos() * beta.sin())
-  .asin();
-  let semi_maj =
-    angle::deg_frm_dms(0, 0, 375.35).to_radians() / saturn_earth_dist;
+  let B = (inc.sin() * beta.cos() * (lambda - ascend_node).sin() - inc.cos() * beta.sin()).asin();
+  let semi_maj = angle::deg_frm_dms(0, 0, 375.35).to_radians() / saturn_earth_dist;
   let semi_min = semi_maj * B.abs().sin();
 
   let N = (113.6655 + 0.8771 * JC).to_radians();
@@ -116,15 +111,11 @@ pub fn elements(JD: f64, nut_in_long: f64, true_oblq: f64) -> Elements {
   let l1 = l - (0.01759 / r).to_radians();
   let b1 = b - (0.000764 * (l - N).cos() / r).to_radians();
 
-  let B1 = (inc.sin() * b1.cos() * (l1 - ascend_node).sin()
-    - inc.cos() * b1.sin())
-  .asin();
-  let U1 = (inc.sin() * b1.sin()
-    + inc.cos() * b1.cos() * (l1 - ascend_node).sin())
-  .atan2(b1.cos() * (l1 - ascend_node).cos());
-  let U2 = (inc.sin() * beta.sin()
-    + inc.cos() * beta.cos() * (lambda - ascend_node).sin())
-  .atan2(beta.cos() * (lambda - ascend_node).cos());
+  let B1 = (inc.sin() * b1.cos() * (l1 - ascend_node).sin() - inc.cos() * b1.sin()).asin();
+  let U1 = (inc.sin() * b1.sin() + inc.cos() * b1.cos() * (l1 - ascend_node).sin())
+    .atan2(b1.cos() * (l1 - ascend_node).cos());
+  let U2 = (inc.sin() * beta.sin() + inc.cos() * beta.cos() * (lambda - ascend_node).sin())
+    .atan2(beta.cos() * (lambda - ascend_node).cos());
   let deltaU = (U1 - U2).abs();
 
   let mut lambda0 = ascend_node - 90.0_f64.to_radians();
@@ -142,9 +133,8 @@ pub fn elements(JD: f64, nut_in_long: f64, true_oblq: f64) -> Elements {
   let asc = coords::asc_frm_ecl(lambda, beta, true_oblq);
   let dec = coords::dec_frm_ecl(lambda, beta, true_oblq);
 
-  let P = (dec0.cos() * (asc0 - asc).sin()).atan2(
-    dec0.sin() * dec.cos() - dec0.cos() * dec.sin() * (asc0 - asc).cos(),
-  );
+  let P = (dec0.cos() * (asc0 - asc).sin())
+    .atan2(dec0.sin() * dec.cos() - dec0.cos() * dec.sin() * (asc0 - asc).cos());
 
   Elements {
     B,

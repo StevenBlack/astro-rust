@@ -84,11 +84,7 @@ sidereal time
 * `asc`: Right ascension *| in radians*
 **/
 #[inline]
-pub fn hr_angl_frm_observer_long(
-  green_sidreal: f64,
-  observer_long: f64,
-  asc: f64,
-) -> f64 {
+pub fn hr_angl_frm_observer_long(green_sidreal: f64, observer_long: f64, asc: f64) -> f64 {
   green_sidreal - observer_long - asc
 }
 
@@ -145,8 +141,7 @@ Computes the ecliptic latitude from equatorial coordinates
                     *mean* obliquity. *| in radians*
 **/
 pub fn ecl_lat_frm_eq(asc: f64, dec: f64, oblq_eclip: f64) -> f64 {
-  (dec.sin() * oblq_eclip.cos() - dec.cos() * oblq_eclip.sin() * asc.sin())
-    .asin()
+  (dec.sin() * oblq_eclip.cos() - dec.cos() * oblq_eclip.sin() * asc.sin()).asin()
 }
 
 /**
@@ -193,8 +188,7 @@ Computes the right ascension from ecliptic coordinates
                     *mean* obliquity. *| in radians*
 **/
 pub fn asc_frm_ecl(ecl_long: f64, ecl_lat: f64, oblq_eclip: f64) -> f64 {
-  (ecl_long.sin() * oblq_eclip.cos() - ecl_lat.tan() * oblq_eclip.sin())
-    .atan2(ecl_long.cos())
+  (ecl_long.sin() * oblq_eclip.cos() - ecl_lat.tan() * oblq_eclip.sin()).atan2(ecl_long.cos())
 }
 
 /**
@@ -213,9 +207,7 @@ Computes the declination from ecliptic coordinates
                     *mean* obliquity. *| in radians*
 **/
 pub fn dec_frm_ecl(ecl_long: f64, ecl_lat: f64, oblq_eclip: f64) -> f64 {
-  (ecl_lat.sin() * oblq_eclip.cos()
-    + ecl_lat.cos() * oblq_eclip.sin() * ecl_long.sin())
-  .asin()
+  (ecl_lat.sin() * oblq_eclip.cos() + ecl_lat.cos() * oblq_eclip.sin() * ecl_long.sin()).asin()
 }
 
 /**
@@ -260,9 +252,9 @@ Computes the azimuth from equatorial coordinates
 * `observer_lat`: Observer's geographical latitude *| in radians*
 **/
 pub fn az_frm_eq(hour_angle: f64, dec: f64, observer_lat: f64) -> f64 {
-  hour_angle.sin().atan2(
-    hour_angle.cos() * observer_lat.sin() - dec.tan() * observer_lat.cos(),
-  )
+  hour_angle
+    .sin()
+    .atan2(hour_angle.cos() * observer_lat.sin() - dec.tan() * observer_lat.cos())
 }
 
 /**
@@ -279,9 +271,7 @@ Computes the altitude from equatorial coordinates
 * `observer_lat`: Observer's geographical latitude *| in radians*
 **/
 pub fn alt_frm_eq(hour_angle: f64, dec: f64, observer_lat: f64) -> f64 {
-  (observer_lat.sin() * dec.sin()
-    + observer_lat.cos() * dec.cos() * hour_angle.cos())
-  .asin()
+  (observer_lat.sin() * dec.sin() + observer_lat.cos() * dec.cos() * hour_angle.cos()).asin()
 }
 
 /**
@@ -342,8 +332,7 @@ Computes the declination from local horizontal coordinates
 * `observer_lat`: Observer's geographical latitude *| in radians*
 **/
 pub fn dec_frm_hz(az: f64, alt: f64, observer_lat: f64) -> f64 {
-  (observer_lat.sin() * alt.sin() - observer_lat.cos() * az.cos() * az.cos())
-    .asin()
+  (observer_lat.sin() * alt.sin() - observer_lat.cos() * az.cos() * az.cos()).asin()
 }
 
 /**
@@ -386,9 +375,7 @@ standard equinox of B1950.0.
 **/
 pub fn gal_lat_frm_eq(asc: f64, dec: f64) -> f64 {
   (dec.sin() * 27.4_f64.to_radians().sin()
-    + dec.cos()
-      * 27.4_f64.to_radians().cos()
-      * (192.25_f64.to_radians() - asc).cos())
+    + dec.cos() * 27.4_f64.to_radians().cos() * (192.25_f64.to_radians() - asc).cos())
   .asin()
 }
 
@@ -460,9 +447,7 @@ of  B1950.0.
 **/
 pub fn dec_frm_gal(gal_long: f64, gal_lat: f64) -> f64 {
   (gal_lat.sin() * 27.4_f64.to_radians().sin()
-    + gal_lat.cos()
-      * 27.4_f64.to_radians().cos()
-      * (gal_long - 123_f64.to_radians()).cos())
+    + gal_lat.cos() * 27.4_f64.to_radians().cos() * (gal_long - 123_f64.to_radians()).cos())
   .asin()
 }
 
