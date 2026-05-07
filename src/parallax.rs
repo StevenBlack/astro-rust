@@ -48,18 +48,14 @@ Computes the topocentric equatorial coordinates of a celestial body
 
 # Returns
 
-* `topocent_eq_point`: Topocentric equatorial point of the
-                      celestial body *| in radians*
+* `topocent_eq_point`: Topocentric equatorial point of the celestial body *| in radians*
 
 # Arguments
 
-* `eq_point`          : Equatorial point of the celestial body
-                        *| in radians*
-* `eq_hz_parllx`      : Equatorial horizontal parallax of the celestial
-                        body *| in radians*
+* `eq_point`          : Equatorial point of the celestial body *| in radians*
+* `eq_hz_parllx`      : Equatorial horizontal parallax of the celestial body *| in radians*
 * `geograph_point`    : Geographic point of the observer *| in radians*
-* `observer_ht`       : Height of the observer above sea level
-                        *| in meters*
+* `observer_ht`       : Height of the observer above sea level *| in meters*
 * `greenw_sidr`: Sidereal time at Greenwhich *| in radians*
 **/
 pub fn topocent_eq_coords(
@@ -102,16 +98,13 @@ Computes the topocentric ecliptic coordinates of a celestial body
 
 `(topocent_ecl_point, topocent_geocent_semidia)`
 
-* `topocent_ecl_point`     : Topocentric ecliptic point of the
-                            celestial body *| in radians*
-* `topocent_geocent_semidia`: Topocentric semidiameter of the
-                            celestial body *| in radians*
+* `topocent_ecl_point`     : Topocentric ecliptic point of the celestial body *| in radians*
+* `topocent_geocent_semidia`: Topocentric semidiameter of the celestial body *| in radians*
 
 # Arguments
 
 * `ecl_point`     : Ecliptic point of the celestial body *| in radians*
-* `eq_hz_parllx`  : Equatorial horizontal parallax of the celestial
-                    body *| in radians*
+* `eq_hz_parllx`  : Equatorial horizontal parallax of the celestial body *| in radians*
 * `geograph_point`: Geographic point of the observer *| in radians*
 * `observer_ht`   : Height of the observer above sea level *| in meters*
 * `loc_sidr`      : Local sidereal time *| in radians*
